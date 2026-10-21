@@ -156,6 +156,10 @@ section:first-of-type { border-top: 0; }
 .timeline ul li { display: list-item; border: 0; padding: 2px 0; }
 .tag { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); margin-left: 8px; }
 
+.team-photo { margin: 16px 0 0; max-width: 560px; }
+.team-photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); display: block; }
+.team-photo figcaption { font-family: var(--mono); font-size: .74rem; color: var(--muted); margin-top: 6px; }
+
 /* Courses */
 .edu { display: grid; grid-template-columns: 1fr 1.6fr; gap: clamp(24px, 5vw, 56px); margin-top: 32px; }
 @media (max-width: 760px) { .edu { grid-template-columns: 1fr; } }
@@ -381,6 +385,10 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
               <li>Lead client projects, including a competitive intelligence database for a healthcare client.</li>
               <li>Sourced client engagements through cold outreach, securing 10+ meetings.</li>
             </ul>
+            <figure class="team-photo">
+              <img src="images/eboard.jpg" alt="Cornell Data Strategy Club executive board in suits on a staircase" loading="lazy">
+              <figcaption>Cornell Data Strategy Club executive board</figcaption>
+            </figure>
           </div>
         </li>
         <li>
@@ -478,7 +486,7 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
         <figure class="ph"><figcaption>Music<small>cycny</small></figcaption><img src="images/music.jpg" alt="Joyce performing with her orchestra on stage"></figure>
         <figure class="ph"><figcaption>New York City<small>home</small></figcaption><img src="images/nyc.jpg" alt="Lower Manhattan skyline at night from the water"></figure>
         <figure class="ph"><figcaption>Through my lens<small>my own photography</small></figcaption><img src="images/lens.jpg" alt="Golden light through a window, photographed by Joyce"></figure>
-        <figure class="ph"><figcaption>Faith<small>Cru Bible study leader; worship vocals at my church</small></figcaption><img src="images/cru.jpg" alt="Joyce with her Cru community group"></figure>
+        <figure class="ph"><figcaption>Faith<small>CRU CG leader</small></figcaption><img src="images/cru.jpg" alt="Joyce with her Cru community group"></figure>
       </div>
     </div>
   </section>
