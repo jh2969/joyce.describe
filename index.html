@@ -195,7 +195,7 @@ section:first-of-type { border-top: 0; }
 .ph.tall { grid-row: span 2; }
 .ph.wide { grid-column: span 2; }
 .ph figcaption {
-  position: absolute; left: 10px; bottom: 10px; right: 10px;
+  position: absolute; z-index: 1; left: 10px; bottom: 10px; right: 10px;
   font-family: var(--ui); font-size: .85rem; line-height: 1.3;
   background: var(--surface); color: var(--fg); padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line);
 }
@@ -243,7 +243,7 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
           </div>
         </div>
         <div class="portrait" role="img" aria-label="Portrait of Joyce Han">
-          <img src="joyce.jpg" alt="Joyce Han">
+          <img src="images/joyce.jpg" alt="Joyce Han">
         </div>
       </div>
 
@@ -473,12 +473,12 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
       <p class="lede">The parts of me that don't fit on a resume.</p>
       <div class="outliers">
         <!-- Replace each placeholder with <img src="photo.jpg" alt="description"> inside the figure -->
-        <figure class="ph tall"><figcaption>Cooking<small>I host dumpling nights for 10+ friends at Chesterton House. Eating is my other hobby.</small></figcaption></figure>
-        <figure class="ph wide"><figcaption>Teaching in Lishan, Taiwan<small>summer 2024</small></figcaption></figure>
-        <figure class="ph"><figcaption>Music<small>violin, piano, vocals</small></figcaption></figure>
-        <figure class="ph"><figcaption>New York City<small>home</small></figcaption></figure>
-        <figure class="ph"><figcaption>Through my lens<small>[one of your own photographs]</small></figcaption></figure>
-        <figure class="ph"><figcaption>Faith<small>Cru Bible study leader; worship vocals at my church</small><img src="CRUpic.jpg" alt="photo with my CRU CG"></figcaption></figure>
+        <figure class="ph tall"><figcaption>Cooking<small>I host dumpling nights for 10+ friends at Chesterton House. Eating is my other hobby.</small></figcaption><img src="images/dumplings.jpg" alt="Friends making dumplings around the stove"></figure>
+        <figure class="ph wide"><figcaption>Teaching in Lishan, Taiwan<small>summer 2024</small></figcaption><img src="images/taiwan.jpg" alt="Joyce with her students in Lishan, Taiwan"></figure>
+        <figure class="ph"><figcaption>Music<small>cycny</small></figcaption><img src="images/music.jpg" alt="Joyce performing with her orchestra on stage"></figure>
+        <figure class="ph"><figcaption>New York City<small>home</small></figcaption><img src="images/nyc.jpg" alt="Lower Manhattan skyline at night from the water"></figure>
+        <figure class="ph"><figcaption>Through my lens<small>my own photography</small></figcaption><img src="images/lens.jpg" alt="Golden light through a window, photographed by Joyce"></figure>
+        <figure class="ph"><figcaption>Faith<small>Cru Bible study leader; worship vocals at my church</small></figcaption><img src="images/cru.jpg" alt="Joyce with her Cru community group"></figure>
       </div>
     </div>
   </section>
