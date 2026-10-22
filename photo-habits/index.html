@@ -71,7 +71,7 @@ nav.top .wrap { display: flex; align-items: center; justify-content: space-betwe
 /* Type */
 h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; }
 h1 { font-size: clamp(2.4rem, 6.5vw, 4.4rem); font-weight: 600; letter-spacing: -.02em; }
-h1 .hl { background: linear-gradient(transparent 62%, color-mix(in srgb, var(--mark) 55%, transparent) 62%); padding-inline: .06em; }
+h1 .hl { white-space: nowrap; background: linear-gradient(transparent 62%, color-mix(in srgb, var(--mark) 55%, transparent) 62%); padding-inline: .06em; }
 h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 600; letter-spacing: -.01em; }
 h3 { font-size: 1.1rem; font-weight: 600; }
 p { margin: 0 0 1em; }
@@ -105,9 +105,17 @@ figure.chart img { display: block; width: 100%; height: auto; }
 figure.chart figcaption { font-family: var(--mono); font-size: .72rem; color: #5b6862; margin-top: 8px; line-height: 1.45; }
 figure.chart.narrow { max-width: 720px; }
 
-/* Diary section: text beside a photo, stacked on narrow screens */
-.diary { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: start; margin-top: 24px; }
-@media (max-width: 820px) { .diary { grid-template-columns: 1fr; } }
+/* Text beside a photo, stacked on narrow screens */
+.split { display: grid; grid-template-columns: 1.15fr 1fr; gap: clamp(24px, 4vw, 48px); align-items: start; margin-top: 24px; }
+.split.portrait { grid-template-columns: 1.5fr 1fr; }
+.split .prose p:last-child { margin-bottom: 0; }
+@media (max-width: 820px) { .split, .split.portrait { grid-template-columns: 1fr; } }
+.split.portrait figure.photo img { aspect-ratio: 4 / 5; object-fit: cover; max-height: 560px; }
+@media (max-width: 820px) { .split.portrait figure.photo { max-width: 420px; } }
+
+/* Hero: title beside a photo */
+.hero-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: clamp(24px, 5vw, 56px); align-items: center; }
+@media (max-width: 820px) { .hero-grid { grid-template-columns: 1fr; } }
 figure.photo { margin: 0; }
 figure.photo img { display: block; width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line); }
 figure.photo figcaption { font-family: var(--mono); font-size: .72rem; color: var(--muted); margin-top: 8px; }
@@ -145,9 +153,17 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
   <section>
     <div class="wrap">
       <div class="cell-label"><span class="in">In [1]:</span> <span>photos = osxphotos.PhotosDB().photos(albums=["2025-present"])</span></div>
-      <h1>What <span class="hl">9,770 photos</span> say about how I see</h1>
-      <p class="lede">I took at least one photo on 649 of the 659 days between January 2025 and October 2026. So I read the metadata behind every one to see what the habit actually looks like.</p>
-      <p class="meta">Personal project · Python, pandas, matplotlib · October 2026</p>
+      <div class="hero-grid">
+        <div>
+          <h1>What <span class="hl">9,770 photos</span> say about how I see</h1>
+          <p class="lede">I took at least one photo on 649 of the 659 days between January 2025 and October 2026. So I read the metadata behind every one to see what the habit actually looks like.</p>
+          <p class="meta">Personal project · Python, pandas, matplotlib · October 2026</p>
+        </div>
+        <figure class="photo">
+          <img src="images/cam.jpg" width="1600" height="1200"
+               alt="Hands holding a silver Panasonic compact camera in warm golden-hour light, its screen showing a sky and field.">
+        </figure>
+      </div>
 
       <div class="describe">
         <table>
@@ -173,9 +189,16 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
     <div class="wrap">
       <div class="cell-label"><span class="in">In [2]:</span> <span>photos.groupby([hour, weekday]).size()</span></div>
       <h2>An evening photographer</h2>
-      <div class="prose" style="margin-top:24px">
+      <div class="split portrait">
+      <div class="prose">
         <p>To find out what my photo habit actually looks like, I pulled the EXIF metadata (capture time, location, camera settings) for every photo. I left out videos, screenshots, and anything saved from another app or edited in Photoshop or Xingtu, so what's left is only what I shot myself. The clearest pattern is that I'm an evening photographer. My photo-taking climbs steadily through the afternoon and peaks at 7pm, and 39% of my photos were taken between 6pm and midnight, while the hours before 10am barely register.</p>
         <p>The week has a shape too. Saturday is my busiest day, Wednesday and Thursday are the quietest, and weekends account for about a third of everything, more than their share of the week.</p>
+      </div>
+        <figure class="photo">
+          <img src="images/bonfire.jpg" width="1200" height="1600" loading="lazy"
+               alt="A tall bonfire at night with students roasting marshmallows, a lit clock tower behind it.">
+          <figcaption>Bonfire night at Cornell</figcaption>
+        </figure>
       </div>
       <div class="figs">
         <figure class="chart">
@@ -197,9 +220,16 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
     <div class="wrap">
       <div class="cell-label"><span class="in">In [3]:</span> <span>photos.resample("M").size(); photos.city.value_counts().head(10)</span></div>
       <h2>It follows where I am, not the season</h2>
-      <div class="prose" style="margin-top:24px">
+      <div class="split portrait">
+      <div class="prose">
         <p>Month by month, my volume doesn't follow the seasons much. It follows where I am. My three biggest spikes were all trips: Shanghai in April 2025, San Francisco in July 2025, and Seattle and Phoenix in July 2026, which was my busiest month at 910 photos.</p>
         <p>The location data also records a move. Until August 2025 almost every photo was taken in New York City. From September onward, going to Cornell meant Ithaca takes over and ends up as my most-photographed place overall.</p>
+      </div>
+        <figure class="photo">
+          <img src="images/shanghai.jpg" width="1200" height="1600" loading="lazy"
+               alt="View from a high-rise window over Shanghai, with the Jin Mao Tower spire and the Oriental Pearl Tower in hazy light.">
+          <figcaption>Looking out over Shanghai</figcaption>
+        </figure>
       </div>
       <div class="figs">
         <figure class="chart">
@@ -221,7 +251,7 @@ footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wr
     <div class="wrap">
       <div class="cell-label"><span class="in">In [4]:</span> <span>print(takeaway)</span></div>
       <h2>A diary I didn't mean to keep</h2>
-      <div class="diary">
+      <div class="split">
         <div class="prose">
           <p>What I like about this view is that I never meant to keep a diary, but my camera roll kept one anyway. Instead of looking back at a journal or calendar, I can look back at my photo album and remember clearly what happened on that day, how I felt, and even hear the sounds in live photos and videos.</p>
           <p>In ordinary weeks I take a steady stream of photos, mostly at golden hour and dinner. On the days that matter most, it jumps; my single busiest day had 214 photos. Only 13% of my photos use the front camera. I mostly point the lens outward, at places and experiences, friends and family, and of course the occasional chalkboard or slides from class.</p>
