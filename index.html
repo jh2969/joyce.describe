@@ -62,6 +62,8 @@ nav.top .wrap { display: flex; align-items: center; justify-content: space-betwe
 nav.top ul { display: flex; flex-wrap: wrap; gap: 4px 18px; list-style: none; margin: 0; padding: 0; font-family: var(--ui); font-size: .9rem; }
 nav.top ul a { color: var(--muted); text-decoration: none; }
 nav.top ul a:hover { color: var(--fg); }
+nav.top ul a { padding-bottom: 3px; border-bottom: 2px solid transparent; transition: color .2s, border-color .2s; }
+nav.top ul a.active { color: var(--fg); border-bottom-color: var(--accent); }
 @media (max-width: 640px) { nav.top ul { display: none; } }
 
 /* Shared type */
@@ -350,7 +352,7 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
           <span class="stack">google sheets · clickup · process design</span>
         </article>
         <article class="proj">
-          <span class="status building">✓ completed · personal</span>
+          <span class="status next">● in progress · personal</span>
           <p class="q">What 9,770 photos say about how I see</p>
           <p>Read the EXIF metadata behind two years of iPhone photos to find when, where and how I shoot. Spoiler: 7pm, Saturdays, and wherever I'm traveling.</p>
           <a class="read-more" href="photo-habits/index.html">see here →</a>
@@ -531,6 +533,23 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
       const s = getSelection(); s.removeAllRanges(); s.addRange(r);
     });
   });
+
+  // Underline the nav link for the section currently on screen
+  const navLinks = [...document.querySelectorAll('nav.top ul a[href^="#"]')];
+  const sections = navLinks.map(a => document.querySelector(a.getAttribute('href')));
+  let ticking = false;
+  function markActive() {
+    ticking = false;
+    const line = document.querySelector('nav.top').offsetHeight + window.innerHeight * 0.25;
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    let current = -1;
+    sections.forEach((sec, i) => { if (sec && sec.getBoundingClientRect().top <= line) current = i; });
+    if (atBottom) current = sections.length - 1;
+    navLinks.forEach((a, i) => a.classList.toggle('active', i === current));
+  }
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(markActive); } }, { passive: true });
+  window.addEventListener('resize', markActive);
+  markActive();
 </script>
 
 </body></html>
