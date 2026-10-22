@@ -189,6 +189,7 @@ section:first-of-type { border-top: 0; }
 .proj p { margin: 0; font-size: .95rem; }
 .proj .q { font-family: var(--display); font-weight: 600; font-size: 1.05rem; line-height: 1.3; }
 .proj .stack { font-family: var(--mono); font-size: .75rem; color: var(--muted); margin-top: auto; }
+.proj .read-more { font-family: var(--ui); font-weight: 600; font-size: .95rem; align-self: flex-start; }
 
 /* Outliers (life outside work) */
 .outliers { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 180px; grid-auto-flow: dense; gap: 12px; margin-top: 32px; }
@@ -328,7 +329,7 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
     <div class="wrap">
       <div class="cell-label"><span class="in">In [4]:</span> <span>joyce.projects.head(4)</span></div>
       <h2>Selected work</h2>
-      <p class="lede">Real data work from research, consulting and my internship, plus one project of my own that's next.</p>
+      <p class="lede">Real data work from research, consulting and my internship, plus one project of my own.</p>
       <div class="pipeline">
         <article class="proj">
           <span class="status building">✓ completed · research</span>
@@ -349,10 +350,11 @@ footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: va
           <span class="stack">google sheets · clickup · process design</span>
         </article>
         <article class="proj">
-          <span class="status next">○ up next · personal</span>
-          <p class="q">[A question from your own life, e.g. "What do I actually cook in a semester?"]</p>
-          <p>[A small project from cooking, photography or music data. One chart and a short write-up is enough.]</p>
-          <span class="stack">python · pandas · matplotlib</span>
+          <span class="status building">✓ completed · personal</span>
+          <p class="q">What 9,770 photos say about how I see</p>
+          <p>Read the EXIF metadata behind two years of iPhone photos to find when, where and how I shoot. Spoiler: 7pm, Saturdays, and wherever I'm traveling.</p>
+          <a class="read-more" href="photo-habits/index.html">Read the case study →</a>
+          <span class="stack">python · osxphotos · pandas · matplotlib</span>
         </article>
       </div>
     </div>

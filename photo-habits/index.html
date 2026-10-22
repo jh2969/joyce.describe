@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Photo Habits · Joyce Han</title>
+<meta name="description" content="What 9,770 iPhone photos say about when, where and how I take pictures: an EXIF metadata analysis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,500;0,6..72,600;0,6..72,700;1,6..72,500&family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Same tokens and notebook look as the joyce.describe home page */
+:root {
+  --bg: #f4f6f3;
+  --surface: #ffffff;
+  --fg: #17201d;
+  --muted: #5b6862;
+  --line: #d5ddd8;
+  --accent: #0e6f64;
+  --accent-soft: #d7ece7;
+  --mark: #e5a823;
+  --display: "Newsreader", "Times New Roman", Times, serif;
+  --body: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --ui: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111614; --surface: #19201d; --fg: #e4ebe7; --muted: #9aa8a1;
+    --line: #2c3632; --accent: #5cc3b2; --accent-soft: #1d3430; --mark: #f0bd4f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111614; --surface: #19201d; --fg: #e4ebe7; --muted: #9aa8a1;
+  --line: #2c3632; --accent: #5cc3b2; --accent-soft: #1d3430; --mark: #f0bd4f;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font-family: var(--body); font-size: 1.0625rem; line-height: 1.6;
+}
+img { max-width: 100%; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; border-radius: 4px; }
+
+.wrap {
+  max-width: 1040px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.prose { max-width: 68ch; }
+
+/* Nav */
+nav.top {
+  position: sticky; top: 0; z-index: 5;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+}
+nav.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+.brand { font-family: var(--mono); font-size: .85rem; color: var(--fg); text-decoration: none; }
+.brand b { color: var(--accent); font-weight: 500; }
+.back { font-family: var(--ui); font-size: .9rem; color: var(--muted); text-decoration: none; }
+.back:hover { color: var(--fg); }
+
+/* Type */
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(2.4rem, 6.5vw, 4.4rem); font-weight: 600; letter-spacing: -.02em; }
+h1 .hl { background: linear-gradient(transparent 62%, color-mix(in srgb, var(--mark) 55%, transparent) 62%); padding-inline: .06em; }
+h2 { font-size: clamp(1.8rem, 4vw, 2.5rem); font-weight: 600; letter-spacing: -.01em; }
+h3 { font-size: 1.1rem; font-weight: 600; }
+p { margin: 0 0 1em; }
+.cell-label {
+  font-family: var(--mono); font-size: .78rem; color: var(--muted);
+  display: flex; gap: 10px; align-items: baseline; margin-bottom: 10px; overflow-wrap: anywhere;
+}
+.cell-label .in { color: var(--accent); flex: none; }
+.lede { color: var(--muted); font-size: clamp(1.1rem, 2vw, 1.25rem); max-width: 52ch; margin: 18px 0 0; }
+.meta { font-family: var(--mono); font-size: .78rem; color: var(--muted); margin-top: 18px; }
+
+section { padding-block: clamp(48px, 8vw, 88px); border-top: 1px solid var(--line); }
+section:first-of-type { border-top: 0; padding-top: clamp(40px, 7vw, 72px); }
+
+/* describe() table */
+.describe {
+  margin-top: 36px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px;
+  overflow-x: auto;
+}
+.describe table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: .82rem; font-variant-numeric: tabular-nums; min-width: 520px; }
+.describe th, .describe td { text-align: left; padding: 9px 14px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.describe thead th { color: var(--muted); font-weight: 500; }
+.describe tbody th { color: var(--accent); font-weight: 500; }
+.describe tr:last-child td, .describe tr:last-child th { border-bottom: 0; }
+.describe caption { caption-side: bottom; text-align: left; padding: 10px 14px; color: var(--muted); font-size: .75rem; border-top: 1px solid var(--line); }
+
+/* Charts */
+.figs { display: grid; gap: 20px; margin-top: 32px; }
+figure.chart { margin: 0; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: clamp(10px, 2vw, 18px); }
+figure.chart img { display: block; width: 100%; height: auto; }
+figure.chart figcaption { font-family: var(--mono); font-size: .72rem; color: #5b6862; margin-top: 8px; line-height: 1.45; }
+figure.chart.narrow { max-width: 720px; }
+
+/* Method */
+.method { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 5vw, 56px); margin-top: 28px; }
+@media (max-width: 760px) { .method { grid-template-columns: 1fr; } }
+.method ol, .method ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+.method li { font-size: .97rem; }
+.method code { font-family: var(--mono); font-size: .85em; background: var(--accent-soft); padding: 1px 5px; border-radius: 4px; }
+.box { padding: 18px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+.box h3 { font-size: .8rem; font-family: var(--mono); font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 12px; }
+.skips { width: 100%; border-collapse: collapse; font-size: .92rem; font-variant-numeric: tabular-nums; }
+.skips td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.skips td:last-child { text-align: right; font-family: var(--mono); font-size: .85rem; }
+.skips tr:last-child td { border-bottom: 0; font-weight: 600; }
+.method .chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 16px 0 0; list-style: none; }
+.chips li { font-family: var(--mono); font-size: .74rem; padding: 3px 9px; border: 1px solid var(--line); border-radius: 6px; }
+
+footer { padding-block: 32px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: .75rem; color: var(--muted); }
+footer .wrap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="../index.html">joyce<b>.describe()</b></a>
+    <a class="back" href="../index.html#work">← All work</a>
+  </div>
+</nav>
+
+<main>
+  <!-- HERO -->
+  <section>
+    <div class="wrap">
+      <div class="cell-label"><span class="in">In [1]:</span> <span>photos = osxphotos.PhotosDB().photos(albums=["2025-present"])</span></div>
+      <h1>What <span class="hl">9,770 photos</span> say about how I see</h1>
+      <p class="lede">I took at least one photo on 649 of the 659 days between January 2025 and October 2026. So I read the metadata behind every one to see what the habit actually looks like.</p>
+      <p class="meta">Personal project · Python, pandas, matplotlib · October 2026</p>
+
+      <div class="describe">
+        <table>
+          <caption>Out [1]: photos.describe(), after removing videos and anything I didn't shoot myself</caption>
+          <thead><tr><th scope="col">feature</th><th scope="col">value</th><th scope="col">notes</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">count</th><td>9,770 photos</td><td>Jan 1, 2025 – Oct 21, 2026</td></tr>
+            <tr><th scope="row">days_active</th><td>649 / 659</td><td>98.5% of days</td></tr>
+            <tr><th scope="row">peak_hour</th><td>7pm</td><td>39% taken between 6pm and midnight</td></tr>
+            <tr><th scope="row">peak_day</th><td>Saturday</td><td>Thursday is the quietest</td></tr>
+            <tr><th scope="row">busiest_month</th><td>July 2026</td><td>910 photos, Seattle and Phoenix</td></tr>
+            <tr><th scope="row">places</th><td>87 cities</td><td>97% of photos geotagged</td></tr>
+            <tr><th scope="row">lens_mix</th><td>52% main · 27% ultra-wide</td><td>13% front camera, 7% telephoto</td></tr>
+            <tr><th scope="row">camera</th><td>iPhone 15 Pro Max</td><td>9,766 of 9,770</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHEN -->
+  <section id="when">
+    <div class="wrap">
+      <div class="cell-label"><span class="in">In [2]:</span> <span>photos.groupby([hour, weekday]).size()</span></div>
+      <h2>An evening photographer</h2>
+      <div class="prose" style="margin-top:24px">
+        <p>To find out what my photo habit actually looks like, I pulled the EXIF metadata (capture time, location, camera settings) for every photo. I left out videos, screenshots, and anything saved from another app or edited in Photoshop or Xingtu, so what's left is only what I shot myself. The clearest pattern is that I'm an evening photographer. My photo-taking climbs steadily through the afternoon and peaks at 7pm, and 39% of my photos were taken between 6pm and midnight, while the hours before 10am barely register.</p>
+        <p>The week has a shape too. Saturday is my busiest day, Wednesday and Thursday are the quietest, and weekends account for about a third of everything, more than their share of the week.</p>
+      </div>
+      <div class="figs">
+        <figure class="chart">
+          <img src="charts/1_hour_of_day.png" width="1971" height="874" loading="lazy"
+               alt="Bar chart of photos by hour of day. Almost none between 1am and 6am, rising through the late morning to about 750 an hour after noon, peaking at 935 photos at 7pm, then falling off after 9pm.">
+          <figcaption>Hour of day, local time where each photo was taken.</figcaption>
+        </figure>
+        <figure class="chart narrow">
+          <img src="charts/2_day_of_week.png" width="1371" height="874" loading="lazy"
+               alt="Bar chart of photos by day of week. Saturday is highest at 1,847, followed by Monday at about 1,580 and Sunday at about 1,450. Wednesday and Thursday are lowest at about 1,100.">
+          <figcaption>Day of week. Weekends are 33.7% of photos, against 28.6% if every day were equal.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHEN, OVER TIME + WHERE -->
+  <section id="where">
+    <div class="wrap">
+      <div class="cell-label"><span class="in">In [3]:</span> <span>photos.resample("M").size(); photos.city.value_counts().head(10)</span></div>
+      <h2>It follows where I am, not the season</h2>
+      <div class="prose" style="margin-top:24px">
+        <p>Month by month, my volume doesn't follow the seasons much. It follows where I am. My three biggest spikes were all trips: Shanghai in April 2025, San Francisco in July 2025, and Seattle and Phoenix in July 2026, which was my busiest month at 910 photos.</p>
+        <p>The location data also records a move. Until August 2025 almost every photo was taken in New York City. From September onward, going to Cornell meant Ithaca takes over and ends up as my most-photographed place overall.</p>
+      </div>
+      <div class="figs">
+        <figure class="chart">
+          <img src="charts/3_monthly_volume.png" width="2371" height="853" loading="lazy"
+               alt="Bar chart of photos per month from January 2025 to October 2026. Most months fall between 200 and 600 photos. Spikes in April 2025 at 812, May 2026 at 686, and July 2026 at 910.">
+          <figcaption>Photos per month. October 2026 is a partial month.</figcaption>
+        </figure>
+        <figure class="chart narrow">
+          <img src="charts/4_top_places.png" width="1570" height="1154" loading="lazy"
+               alt="Horizontal bar chart of the top 10 places. Ithaca, NY 3,801; New York, NY 3,007; Shanghai 556; Seattle 244; San Francisco 242; Cayuga Heights, NY 153; Phoenix 146; Boston 122; Scottsdale 116; Philadelphia 100.">
+          <figcaption>Top 10 places by photo count, using the city names Apple Photos assigns from GPS.</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAKEAWAY -->
+  <section id="takeaway">
+    <div class="wrap">
+      <div class="cell-label"><span class="in">In [4]:</span> <span>print(takeaway)</span></div>
+      <h2>A diary I didn't mean to keep</h2>
+      <div class="prose" style="margin-top:24px">
+        <p>What I like about this view is that I never meant to keep a diary, but my camera roll kept one anyway. Instead of looking back at a journal or calendar, I can look back at my photo album and remember clearly what happened on that day, how I felt, and even hear the sounds in live photos and videos.</p>
+        <p>In ordinary weeks I take a steady stream of photos, mostly at golden hour and dinner. On the days that matter most, it jumps; my single busiest day had 214 photos. Only 13% of my photos use the front camera. I mostly point the lens outward, at places and experiences, friends and family, and of course the occasional chalkboard or slides from class.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- METHOD -->
+  <section id="method">
+    <div class="wrap">
+      <div class="cell-label"><span class="in">In [5]:</span> <span>help(photos)</span></div>
+      <h2>How I did it</h2>
+      <div class="method">
+        <div>
+          <ol>
+            <li><b>Read the metadata, not the photos.</b> Instead of exporting tens of gigabytes of originals, I read EXIF straight from the Apple Photos library database with <code>osxphotos</code>. The whole 12,126-item album took about 2 seconds.</li>
+            <li><b>Keep only what I shot.</b> Every item records the app that created it. I kept photos from Apple's Camera and dropped everything else: Files, AirDrop, Messages, Instagram, WeChat, and edits from Xingtu and Photoshop. Those files carry edited or missing EXIF and would skew the timing.</li>
+            <li><b>Analyze and chart.</b> I used <code>pandas</code> to group by hour, weekday, month and city, and <code>matplotlib</code> to make the charts. Times are local to wherever each photo was taken, so travel doesn't shift the hour-of-day pattern.</li>
+            <li><b>Keep locations private.</b> The raw data has exact GPS coordinates, so it never leaves my laptop. Only city-level totals are published.</li>
+          </ol>
+          <ul class="chips"><li>python</li><li>osxphotos</li><li>pandas</li><li>matplotlib</li><li>exif</li></ul>
+        </div>
+        <div class="box">
+          <h3>What was filtered out</h3>
+          <table class="skips">
+            <tr><td>Items in the album</td><td>12,126</td></tr>
+            <tr><td>Videos</td><td>−842</td></tr>
+            <tr><td>Saved from Files, AirDrop or Drive</td><td>−643</td></tr>
+            <tr><td>Received in Messages, WeChat and other chat apps</td><td>−398</td></tr>
+            <tr><td>Re-saved copies from Photos</td><td>−273</td></tr>
+            <tr><td>Editing, social and other apps (Xingtu, Instagram, TikTok…)</td><td>−200</td></tr>
+            <tr><td>Photos I took</td><td>9,770</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap"><span>Built by Joyce Han</span><a href="../index.html#work">← Back to joyce.describe()</a></div>
+</footer>
+
+</body>
+</html>
